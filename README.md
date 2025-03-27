@@ -37,17 +37,11 @@ Run:
 gcloud auth application-default login
 gcloud config set project your-gcp-project-id
 ```
-### **4️⃣ Grant Required IAM Permissions**
+### **4️⃣ Crete GCS bucket to store Terraform State in GCS**
 
 Run:
 ```sh
-gcloud projects add-iam-policy-binding your-gcp-project-id \
-  --member="user:$(gcloud config get-value account)" \
-  --role="roles/storage.objectViewer"
-
-gcloud projects add-iam-policy-binding your-gcp-project-id \
-  --member="user:$(gcloud config get-value account)" \
-  --role="roles/compute.admin"
+gsutil mb -p your-gcp-project-id -l us-central1 gs://your-terraform-state-bucket
 ```
 
 ### **5️⃣ Initialize and Deploy with Terraform**
@@ -62,3 +56,23 @@ This script will:
 - Load environment variables
 - Initialize Terraform (`terraform init`)
 - Apply the Terraform configuration (`terraform apply`)
+
+### **6️⃣ Monitor in GCP Console**
+
+1. Go to **Compute Engine > VM Instances** in GCP Console.  
+2. Check if the `demo-instance` is running.  
+
+### **7️⃣ Destroy Resources**  
+
+Run the following command to destroy resources:  
+
+```sh
+terraform destroy -auto-approve
+```
+
+### **8️⃣ Verify Destruction**  
+
+To verify that the resources have been successfully destroyed, run:
+
+```sh
+terraform show
