@@ -8,6 +8,8 @@ jobs:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
 
+    if: github.actor == github.repository_owner
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -24,4 +26,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -auto-approve
